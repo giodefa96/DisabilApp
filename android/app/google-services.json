@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "396714087650",
+    "project_id": "disabilapp",
+    "storage_bucket": "disabilapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:396714087650:android:89b1c8bd74bb313f0a7abb",
+        "android_client_info": {
+          "package_name": "it.giodefa96.disabilapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6BTLEHpopFtgq2VSFJlIiZ6Q6hTrlDCo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
