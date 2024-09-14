@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:disabilapp/models/cloud_note.dart';
 import 'package:disabilapp/servicies/auth/auth_service.dart';
-import 'package:disabilapp/servicies/cloud/firebase_cloud_storage.dart';
+import 'package:disabilapp/servicies/cloud/firebase_notes_cloud_storage.dart';
 import 'package:disabilapp/utilities/dialogs/cannot_share_empty_dialog.dart';
 import 'package:disabilapp/utilities/generics/get_arguments.dart';
 import 'package:share_plus/share_plus.dart';

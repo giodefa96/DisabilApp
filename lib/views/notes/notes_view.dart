@@ -5,7 +5,7 @@ import 'package:disabilapp/models/cloud_note.dart';
 import 'package:disabilapp/servicies/auth/auth_service.dart';
 import 'package:disabilapp/servicies/auth/bloc/auth_bloc.dart';
 import 'package:disabilapp/servicies/auth/bloc/auth_event.dart';
-import 'package:disabilapp/servicies/cloud/firebase_cloud_storage.dart';
+import 'package:disabilapp/servicies/cloud/firebase_notes_cloud_storage.dart';
 import 'package:disabilapp/utilities/dialogs/logout_dialog.dart';
 import 'package:disabilapp/utilities/logging_util.dart';
 import 'package:disabilapp/views/notes/notes_list_view.dart';
