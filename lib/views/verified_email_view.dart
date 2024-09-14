@@ -1,122 +1,79 @@
+import 'package:disabilapp/servicies/auth/bloc/auth_bloc.dart';
+import 'package:disabilapp/servicies/auth/bloc/auth_event.dart';
 import 'package:flutter/material.dart';
-import 'package:disabilapp/constants/routes.dart';
-import 'package:disabilapp/servicies/auth/auth_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class VerifyEmailView extends StatefulWidget {
-  const VerifyEmailView({super.key});
+  const VerifyEmailView({Key? key}) : super(key: key);
 
   @override
-  State<VerifyEmailView> createState() => _VerifyEmailViewState();
+  _VerifyEmailViewState createState() => _VerifyEmailViewState();
 }
 
 class _VerifyEmailViewState extends State<VerifyEmailView> {
-  late Future<void> _verificationFuture;
-  String _feedbackMessage = '';
-
-  Future<void> _signOut() async {
-    try {
-      await AuthService.firebase().logOut();
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        registerRoute,
-        (route) => false,
-      );
-    } catch (e) {
-      setState(() {
-        _feedbackMessage = 'An error occurred while signing out.';
-      });
-    }
-  }
-
-  Future<void> _sendVerificationEmail() async {
-    try {
-      await AuthService.firebase().sendEmailVerification();
-      setState(() {
-        _feedbackMessage = 'Verification email has been sent!';
-      });
-    } catch (e) {
-      setState(() {
-        _feedbackMessage =
-            'An error occurred while sending verification email.';
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _verificationFuture = _sendVerificationEmail();
-  }
-
-  Widget _buildFeedbackMessage() {
-    return Text(
-      _feedbackMessage,
-      style: TextStyle(
-        color: _feedbackMessage.contains('error') ? Colors.red : Colors.green,
-      ),
-      textAlign: TextAlign.center,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Verify Email'),
-        backgroundColor: Colors.blue,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-              registerRoute,
-              (route) => false,
-            );
-          },
-        ),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "We've sent you an email verification. Please open it to verify your account.",
-                style: TextStyle(fontSize: 18),
-                textAlign: TextAlign.center,
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(height: 40),
+            const Icon(
+              Icons.email_outlined,
+              size: 100,
+              color: Colors.blue,
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Verify your email address',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
               ),
-              const SizedBox(height: 10),
-              const Text(
-                "If you haven't received the email yet, please click the button below to resend it.",
-                style: TextStyle(fontSize: 18),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              FutureBuilder<void>(
-                future: _verificationFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  } else {
-                    return ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _verificationFuture = _sendVerificationEmail();
-                        });
-                      },
-                      child: const Text('Resend Verification Email'),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'We have sent a verification email to your inbox. Please check your email and click on the link to verify your account.',
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 40),
+            ElevatedButton.icon(
+              onPressed: () {
+                context.read<AuthBloc>().add(
+                      const AuthEventSendEmailVerification(),
                     );
-                  }
-                },
+              },
+              icon: const Icon(Icons.refresh),
+              label: const Text('Resend Verification Email'),
+              style: ElevatedButton.styleFrom(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
-              const SizedBox(height: 20),
-              _buildFeedbackMessage(),
-              TextButton(
-                  child: const Text('Restart'),
-                  onPressed: () async {
-                    await _signOut();
-                  })
-            ],
-          ),
+            ),
+            const SizedBox(height: 20),
+            TextButton(
+              onPressed: () async {
+                context.read<AuthBloc>().add(
+                      const AuthEventLogOut(),
+                    );
+              },
+              child: const Text(
+                'Restart',
+                style: TextStyle(fontSize: 16, color: Colors.redAccent),
+              ),
+            ),
+          ],
         ),
       ),
     );

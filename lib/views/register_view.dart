@@ -48,79 +48,94 @@ class _RegisterViewState extends State<RegisterView> {
       listener: (context, state) async {
         if (state is AuthStateRegistering) {
           if (state.exception is WeakPasswordAuthException) {
-            await showErrorDialog(
-              context,
-              'Weak Passoword!',
-            );
+            await showErrorDialog(context, 'Weak Password!');
           } else if (state.exception is EmailAlreadyInUseAuthException) {
-            await showErrorDialog(
-              context,
-              'Email already in use!',
-            );
+            await showErrorDialog(context, 'Email already in use!');
+          } else if (state.exception is InvalidEmailAuthException) {
+            await showErrorDialog(context, 'Invalid Email!');
           } else if (state.exception is GenericAuthException) {
             await showErrorDialog(
-              context,
-              'An error occurred. Please try again later.',
-            );
-          } else if (state.exception is InvalidEmailAuthException) {
-            await showErrorDialog(
-              context,
-              'Invalid Email!',
-            );
+                context, 'An error occurred. Please try again later.');
           }
         }
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Center(
-            child: const Text('Register'),
-          ),
-          backgroundColor: Colors.blue,
+          title: const Text('Register'),
+          centerTitle: true,
+          backgroundColor: Colors.blueAccent,
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(24.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text("Enter your email and password to register"),
+              const SizedBox(height: 20),
+              const Text(
+                "Create Your Account",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                "Enter your email and password to register.",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+              const SizedBox(height: 40),
               TextField(
                 controller: _email,
                 keyboardType: TextInputType.emailAddress,
                 enableSuggestions: false,
                 autocorrect: false,
                 autofocus: true,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Email',
-                  hintText: 'Enter Your Email Here',
+                  hintText: 'Enter Your Email',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
               ),
+              const SizedBox(height: 20),
               TextField(
                 controller: _password,
                 obscureText: true,
                 enableSuggestions: false,
                 autocorrect: false,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Password',
-                  hintText: 'Enter Your Password Here',
+                  hintText: 'Enter Your Password',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 40),
+              ElevatedButton(
+                onPressed: _register,
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const Text(
+                  'Register',
+                  style: TextStyle(fontSize: 18),
                 ),
               ),
               const SizedBox(height: 20),
-              Center(
-                child: Column(
-                  children: [
-                    ElevatedButton(
-                      onPressed: _register,
-                      child: const Text('Register'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        context.read<AuthBloc>().add(
-                              const AuthEventLogOut(),
-                            );
-                      },
-                      child: const Text('Already have an account? Login'),
-                    ),
-                  ],
+              TextButton(
+                onPressed: () {
+                  context.read<AuthBloc>().add(const AuthEventLogOut());
+                },
+                child: const Text(
+                  'Already have an account? Login',
+                  style: TextStyle(fontSize: 16, color: Colors.blueAccent),
                 ),
               ),
             ],
