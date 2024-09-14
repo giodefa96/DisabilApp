@@ -64,8 +64,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           email: email,
           password: password,
         );
+        await provider.sendEmailVerification();
+        emit(const AuthStateNeedsVerification(isLoading: false));
       } on Exception catch (e) {
-        emit(AuthStateRegistering(exception: e, isLoading: false));
+        emit(AuthStateRegistering(
+          exception: e,
+          isLoading: false,
+        ));
       }
     });
     // should register
@@ -100,6 +105,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             isLoading: false,
             loadingText: 'Please wait...',
           );
+          emit(const AuthStateNeedsVerification(isLoading: false));
         } else {
           emit(
             const AuthStateLoggedOut(
